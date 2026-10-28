@@ -21,22 +21,21 @@ Seluruh angka di naskah dihasilkan oleh notebook pada repositori ini, bukan dihi
 │       ├── test_dataset_20.csv                   # 664 baris uji
 │       ├── validasi_label_manual.csv             # 150 baris, kolom label_manual kosong
 │       └── validasi_label_manual_terisi.csv      # 150 baris, sudah terisi (dasar hitung Kappa)
-├── validation/
-│   ├── 01_Preprocessing_Penyortiran_Split80_20.ipynb
-│   ├── 02_Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb
-│   └── 03_Validasi_Sentimen_IndoBERT_Revisi.ipynb
+├── validation/                                   # kosong, menunggu notebook baru
+│   └── .gitkeep
 ├── replication/
 │   ├── Replikasi_Lolos/                          # 4 paper yang berhasil direplikasi
 │   └── Replikasi_Tidak_Lolos/                    # 9 paper yang gagal direplikasi
 └── README.md
 ```
 
-Repositori ini sengaja hanya memuat dataset, kode validasi, dan kode replikasi. Berkas naskah `.docx`, skrip penyusun naskah, dan kerangka templat dikelola terpisah.
+Repositori ini sengaja hanya memuat dataset dan kode replikasi. Berkas naskah `.docx`, skrip penyusun naskah, dan kerangka templat dikelola terpisah.
 
-* **`validation/02_Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb`** — notebook utama. Melatih IndoBERT, menjalankan empat *baseline* klasik, dekomposisi matriks konfusi, ROC/PR, Stratified 5-Fold CV, uji Wilcoxon dan uji-t berpasangan, pengukuran latensi, serta regresi logistik insiden VAR. Memuat aturan kata kunci terpusat sehingga `penaldo` tidak terhitung sebagai penalti dan `variasi` tidak terhitung sebagai VAR. Menghasilkan angka yang dipakai naskah.
-* **`validation/03_Validasi_Sentimen_IndoBERT_Revisi.ipynb`** — notebook revisi yang lebih baru. Menambah audit komentar kembar latih→uji, audit label sarkasme berbasis penanda tawa, tiga *seed* (42/43/44), pencatatan versi pustaka, dan pembandingan aturan kata kunci VAR lama lawan baru. Menyimpan seluruh tabel keluaran ke `hasil_validasi/` beserta `ringkasan_angka_paper.json`.
+**Catatan: isi `validation/` sudah dikosongkan.** Ketiga notebook lama (01, 02, 03) dihapus karena akan diganti. Selama folder ini kosong, jalankan `replication/` lebih dulu, atau tunggu notebook pengganti masuk.
+
+* **`data/raw/youtube_comments.csv`** — tarikan mentah 5.460 komentar lewat YouTube Data API v3.
+* **`data/processed/`** — hasil penyaringan bertahap: korpus berlabel 3.316, komentar terbuang beserta alasannya, korpus lolos saring bahasa, serta split terstratifikasi 80:20 (2.652 latih / 664 uji).
 * **`data/processed/validasi_label_manual_terisi.csv`** — 150 label manual beserta label otomatis, dasar hitung kesepakatan 46,00% dan Cohen's Kappa 0,19. Versi kosongnya (`validasi_label_manual.csv`) disertakan agar alur anotasi bisa diulang.
-* **`validation/01_Preprocessing_Penyortiran_Split80_20.ipynb`** — penyaringan bahasa dua sisi dan split terstratifikasi 80:20 dengan `random_state=42`. Membaca `data/raw/youtube_comments.csv` dan menuliskan seluruh korpus ke `data/processed/`.
 * **`replication/`** — notebook replikasi keempat paper acuan pada dataset aslinya, dipakai untuk menetapkan metode mana yang layak dipindahkan ke korpus YouTube. Empat lolos, sembilan tidak.
 
 ---
@@ -52,10 +51,10 @@ python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install "transformers>=4.30.0" "torch>=2.0.0" "scikit-learn>=1.2.0" \
             "statsmodels>=0.14.0" seaborn matplotlib scipy psutil pandas numpy jupyterlab
-jupyter lab validation/
+jupyter lab replication/
 ```
 
-Jalankan notebook `01` lebih dulu, lalu `02`. Keduanya memakai path relatif terhadap direktori kerja, jadi jalankan Jupyter dari akar repositori atau sesuaikan variabel path di sel pemuatan data.
+Notebook replikasi memakai path relatif terhadap direktori kerja, jadi jalankan Jupyter dari akar repositori atau sesuaikan variabel path di sel pemuatan data. Selama `validation/` masih kosong, dataset di `data/processed/` belum bisa diproses ulang lewat notebook.
 
 ### Opsi 2: Google Colab
 
@@ -65,11 +64,11 @@ Jalankan notebook `01` lebih dulu, lalu `02`. Keduanya memakai path relatif terh
 
 ---
 
-## ⚠️ Dua notebook, dua set angka
+## ⚠️ Angka naskah berasal dari notebook yang sudah dihapus
 
-`validation/02` dan `validation/03` **tidak menghasilkan angka yang sama**. Notebook 02 adalah dasar seluruh angka pada naskah; notebook 03 adalah revisi yang lebih baru dan belum dipakai di naskah.
+Seluruh angka pada naskah dihasilkan notebook `02` (versi `Validasi_Metode_4Paper_ke_Dataset_YouTube_(3).ipynb`, 22 sel, 11 tereksekusi). Berkasnya kini tidak ada di repo. Sebagai gantinya pernah ada notebook revisi `03` yang menghasilkan angka berbeda, dan itu juga ikut dihapus.
 
-| Metrik (data uji) | Naskah & notebook 02 | Notebook 03 |
+| Metrik (data uji) | Naskah (dari notebook 02) | Notebook revisi 03 |
 |---|---|---|
 | Akurasi | 74,85% | 78,77% |
 | Macro-F1 | 72,56% | 76,70% |
@@ -81,9 +80,9 @@ Jalankan notebook `01` lebih dulu, lalu `02`. Keduanya memakai path relatif terh
 | Akurasi antar-*seed* | 76,66 ± 2,07 | 78,97 ± 0,40 |
 | Uji Wilcoxon / uji-t | ada | **tidak ada** |
 
-Penyebab utama: notebook 03 memperbaiki aturan kata kunci kategori VAR dan aspek entitas, sehingga Tabel 1, Tabel 2, dan koefisien OLS ikut bergeser. Notebook 03 juga mengganti *seed* dan menghapus uji signifikansi.
+Penyebab utama: notebook revisi memperbaiki aturan kata kunci kategori VAR dan aspek entitas, sehingga Tabel 1, Tabel 2, dan koefisien OLS ikut bergeser. Notebook itu juga mengganti *seed* dan menghapus uji signifikansi.
 
-**Konsekuensinya:** angka di naskah belum tentu cocok dengan keluaran notebook 03. Kalau dosen menjalankan notebook 03 lalu membandingkan dengan naskah, selisihnya akan terlihat. Putuskan satu: perbarui naskah memakai angka 03, atau tandai 03 sebagai eksplorasi dan tetap pakai 02.
+Tabel di atas disimpan sebagai rujukan selama `validation/` kosong. Begitu notebook pengganti masuk, selisih ini perlu diselesaikan: perbarui naskah, atau pastikan notebook baru benar-benar mereproduksi angka naskah.
 
 ---
 
