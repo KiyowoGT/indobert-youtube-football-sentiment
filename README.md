@@ -19,10 +19,12 @@ Seluruh angka di naskah dihasilkan oleh notebook pada repositori ini, bukan dihi
 │       ├── dataset_komentar_indonesia_bersih.csv # keluaran tahap saring bahasa
 │       ├── train_dataset_80.csv                  # 2.652 baris latih
 │       ├── test_dataset_20.csv                   # 664 baris uji
-│       └── validasi_label_manual_terisi.csv      # 150 baris validasi anotasi manual
+│       ├── validasi_label_manual.csv             # 150 baris, kolom label_manual kosong
+│       └── validasi_label_manual_terisi.csv      # 150 baris, sudah terisi (dasar hitung Kappa)
 ├── validation/
 │   ├── 01_Preprocessing_Penyortiran_Split80_20.ipynb
-│   └── 02_Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb
+│   ├── 02_Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb
+│   └── 03_Validasi_Sentimen_IndoBERT_Revisi.ipynb
 ├── replication/
 │   ├── Replikasi_Lolos/                          # 4 paper yang berhasil direplikasi
 │   └── Replikasi_Tidak_Lolos/                    # 9 paper yang gagal direplikasi
@@ -31,7 +33,9 @@ Seluruh angka di naskah dihasilkan oleh notebook pada repositori ini, bukan dihi
 
 Repositori ini sengaja hanya memuat dataset, kode validasi, dan kode replikasi. Berkas naskah `.docx`, skrip penyusun naskah, dan kerangka templat dikelola terpisah.
 
-* **`validation/02_Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb`** — notebook utama. Melatih IndoBERT, menjalankan empat *baseline* klasik, dekomposisi matriks konfusi, ROC/PR, Stratified 5-Fold CV, uji Wilcoxon dan uji-t berpasangan, pengukuran latensi, serta regresi logistik insiden VAR. Memuat aturan kata kunci terpusat sehingga `penaldo` tidak terhitung sebagai penalti dan `variasi` tidak terhitung sebagai VAR.
+* **`validation/02_Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb`** — notebook utama. Melatih IndoBERT, menjalankan empat *baseline* klasik, dekomposisi matriks konfusi, ROC/PR, Stratified 5-Fold CV, uji Wilcoxon dan uji-t berpasangan, pengukuran latensi, serta regresi logistik insiden VAR. Memuat aturan kata kunci terpusat sehingga `penaldo` tidak terhitung sebagai penalti dan `variasi` tidak terhitung sebagai VAR. Menghasilkan angka yang dipakai naskah.
+* **`validation/03_Validasi_Sentimen_IndoBERT_Revisi.ipynb`** — notebook revisi yang lebih baru. Menambah audit komentar kembar latih→uji, audit label sarkasme berbasis penanda tawa, tiga *seed* (42/43/44), pencatatan versi pustaka, dan pembandingan aturan kata kunci VAR lama lawan baru. Menyimpan seluruh tabel keluaran ke `hasil_validasi/` beserta `ringkasan_angka_paper.json`.
+* **`data/processed/validasi_label_manual_terisi.csv`** — 150 label manual beserta label otomatis, dasar hitung kesepakatan 46,00% dan Cohen's Kappa 0,19. Versi kosongnya (`validasi_label_manual.csv`) disertakan agar alur anotasi bisa diulang.
 * **`validation/01_Preprocessing_Penyortiran_Split80_20.ipynb`** — penyaringan bahasa dua sisi dan split terstratifikasi 80:20 dengan `random_state=42`. Membaca `data/raw/youtube_comments.csv` dan menuliskan seluruh korpus ke `data/processed/`.
 * **`replication/`** — notebook replikasi keempat paper acuan pada dataset aslinya, dipakai untuk menetapkan metode mana yang layak dipindahkan ke korpus YouTube. Empat lolos, sembilan tidak.
 
@@ -58,6 +62,28 @@ Jalankan notebook `01` lebih dulu, lalu `02`. Keduanya memakai path relatif terh
 1. Buat folder `dataset` di direktori utama Google Drive.
 2. Unggah `data/processed/train_dataset_80.csv` dan `data/processed/test_dataset_20.csv` ke folder tersebut.
 3. Jalankan notebook; kode akan *mount* Drive dan membaca dari `/content/drive/MyDrive/dataset/`.
+
+---
+
+## ⚠️ Dua notebook, dua set angka
+
+`validation/02` dan `validation/03` **tidak menghasilkan angka yang sama**. Notebook 02 adalah dasar seluruh angka pada naskah; notebook 03 adalah revisi yang lebih baru dan belum dipakai di naskah.
+
+| Metrik (data uji) | Naskah & notebook 02 | Notebook 03 |
+|---|---|---|
+| Akurasi | 74,85% | 78,77% |
+| Macro-F1 | 72,56% | 76,70% |
+| ROC-AUC | 89,24% | 89,90% |
+| Latensi | 5,434 ms | 5,03 ms |
+| *Throughput* | 184,0 RPS | 198,8 RPS |
+| RAM | 2.041,1 MB | 1.817,6 MB |
+| *Seed* | 42, 123, 2024 | 42, 43, 44 |
+| Akurasi antar-*seed* | 76,66 ± 2,07 | 78,97 ± 0,40 |
+| Uji Wilcoxon / uji-t | ada | **tidak ada** |
+
+Penyebab utama: notebook 03 memperbaiki aturan kata kunci kategori VAR dan aspek entitas, sehingga Tabel 1, Tabel 2, dan koefisien OLS ikut bergeser. Notebook 03 juga mengganti *seed* dan menghapus uji signifikansi.
+
+**Konsekuensinya:** angka di naskah belum tentu cocok dengan keluaran notebook 03. Kalau dosen menjalankan notebook 03 lalu membandingkan dengan naskah, selisihnya akan terlihat. Putuskan satu: perbarui naskah memakai angka 03, atau tandai 03 sebagai eksplorasi dan tetap pakai 02.
 
 ---
 
