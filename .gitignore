@@ -1,0 +1,69 @@
+# Virtualenv & artefak Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Naskah, PDF, dan berkas non-md di akar
+*.docx
+*.pdf
+
+# Skrip penyusun naskah & kerangka templat, tidak diunggah
+/split_gambar3_and_build.py
+/build_jati_rigorous/
+/build_jati/
+/build_jati_clean/
+/build_jati_compliant/
+/build_jati_refined/
+/archive/
+/reports/
+/scripts/
+/jati_media/
+figs_nb/
+figs_nb3_*.png
+page_rendered-*.png
+page_preview-*.png
+page5_rendered-*.png
+pg-*.png
+r.html
+
+# Duplikat di root: salinan resmi ada di data/ dan validation/
+/youtube_comments.csv
+/dataset_youtube_labeled_all.csv
+/dataset_dibuang.csv
+/dataset_komentar_indonesia_bersih.csv
+/train_dataset_80.csv
+/test_dataset_20.csv
+/validasi_label_manual_terisi.csv
+/validasi_label_manual_terisi.xlsx
+/dataset_1000_siap_anotasi.csv
+/dataset_diloloskan.csv
+/Preprocessing_Penyortiran_Split80_20.ipynb
+/Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb
+/Validasi_Lama_Regex_Diperbaiki.ipynb
+/notebooks/
+/replikasi/
+
+# Cache pustaka dan materi kuliah
+/_hf/
+/_pylibs/
+/_m3/
+/_mat2/
+/_materi/
+/_t/
+/_x/
+
+
+# Model dan keluaran besar
+/models/
+*.pt
+*.bin
+*.safetensors
+
+# OS
+.DS_Store
+Thumbs.db
+
+
+/LICENSE
+/requirements.txt
