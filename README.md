@@ -22,7 +22,7 @@ Seluruh angka di naskah dihasilkan dari dataset ini, bukan dihitung manual.
 │       ├── validasi_label_manual.csv             # 150 baris, kolom label_manual kosong
 │       └── validasi_label_manual_terisi.csv      # 150 baris, sudah terisi
 ├── validation/
-│   └── Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb
+│   └── Validasi_Sentimen_IndoBERT_Revisi.ipynb
 └── replication/
     ├── Replikasi_Lolos/                          # 4 paper yang berhasil direplikasi
     └── Replikasi_Tidak_Lolos/                    # 9 paper yang gagal direplikasi
@@ -146,9 +146,22 @@ Batas bawah versi mengikuti sel `pip install` pada notebook. Untuk mereproduksi 
 
 ## 📌 Catatan
 
-`validation/Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb` adalah satu-satunya notebook validasi yang tersisa. Isinya melatih IndoBERT, menjalankan empat *baseline* klasik, dekomposisi matriks konfusi, ROC/PR, Stratified 5-Fold CV, uji Wilcoxon dan uji-t berpasangan, pengukuran latensi, serta regresi logistik insiden VAR. Seluruh angka di naskah berasal dari berkas ini. Versi tereksekusinya 22 sel dengan 11 sel berjalan dan 6 gambar.
+`validation/Validasi_Sentimen_IndoBERT_Revisi.ipynb` adalah notebook eksperimen utama. Isinya audit komentar kembar latih→uji, audit label sarkasme berbasis penanda tawa, empat *baseline* TF-IDF, pelatihan IndoBERT tiga *seed* (42/43/44), evaluasi per kelas, ROC/PR, aturan kata kunci kategori VAR, regresi logistik insiden VAR, dan penyimpanan seluruh tabel keluaran ke `hasil_validasi/`.
 
 Jalankan dari akar repositori, karena notebook memakai path relatif dan membaca `data/processed/train_dataset_80.csv` serta `test_dataset_20.csv`.
+
+### Angka notebook ini berbeda dari naskah
+
+| Metrik (data uji) | Naskah | Notebook ini |
+|---|---|---|
+| Akurasi | 74,85% | 78,77% |
+| Macro-F1 | 72,56% | 76,70% |
+| ROC-AUC | 89,24% | 89,90% |
+| Latensi | 5,434 ms | 5,03 ms |
+| *Seed* | 42, 123, 2024 | 42, 43, 44 |
+| Uji Wilcoxon / uji-t | ada, p = 0,160 / 0,154 | **tidak ada** |
+
+Sebabnya: notebook ini memperbaiki aturan kata kunci kategori VAR dan aspek entitas, sehingga Tabel 1, Tabel 2, dan koefisien OLS ikut bergeser; *seed* juga diganti dan uji signifikansi dihapus. Notebook menutup dengan catatan bahwa abstrak, 3.1, dan kesimpulan "harus diperbarui" — dan itu belum dikerjakan. Jadi angka naskah belum tentu cocok dengan keluaran notebook; samakan dulu sebelum menyerahkan.
 
 ## 📄 Lisensi
 
