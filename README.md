@@ -21,6 +21,8 @@ Seluruh angka di naskah dihasilkan dari dataset ini, bukan dihitung manual.
 │       ├── test_dataset_20.csv                   # 664 baris uji
 │       ├── validasi_label_manual.csv             # 150 baris, kolom label_manual kosong
 │       └── validasi_label_manual_terisi.csv      # 150 baris, sudah terisi
+├── validation/
+│   └── Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb
 └── replication/
     ├── Replikasi_Lolos/                          # 4 paper yang berhasil direplikasi
     └── Replikasi_Tidak_Lolos/                    # 9 paper yang gagal direplikasi
@@ -121,7 +123,7 @@ print('kappa:', cohen_kappa_score(df.label_manual, df.label_otomatis, labels=lab
 python -m venv .venv && source .venv/bin/activate
 pip install "transformers>=4.30.0" "torch>=2.0.0" "scikit-learn>=1.2.0" \
             "statsmodels>=0.14.0" seaborn matplotlib scipy psutil pandas numpy jupyterlab
-jupyter lab replication/
+jupyter lab            # lalu buka validation/ atau replication/ dari peramban
 ```
 
 | Komponen | Nilai |
@@ -144,7 +146,9 @@ Batas bawah versi mengikuti sel `pip install` pada notebook. Untuk mereproduksi 
 
 ## 📌 Catatan
 
-`validation/` pernah memuat notebook 01–03 dan kini dikosongkan untuk diganti. Selama kosong, dataset di `data/processed/` belum bisa diproses ulang lewat notebook; jalankan `replication/` lebih dulu atau tunggu notebook pengganti masuk.
+`validation/Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb` adalah satu-satunya notebook validasi yang tersisa. Isinya melatih IndoBERT, menjalankan empat *baseline* klasik, dekomposisi matriks konfusi, ROC/PR, Stratified 5-Fold CV, uji Wilcoxon dan uji-t berpasangan, pengukuran latensi, serta regresi logistik insiden VAR. Seluruh angka di naskah berasal dari berkas ini. Versi tereksekusinya 22 sel dengan 11 sel berjalan dan 6 gambar.
+
+Jalankan dari akar repositori, karena notebook memakai path relatif dan membaca `data/processed/train_dataset_80.csv` serta `test_dataset_20.csv`.
 
 ## 📄 Lisensi
 
