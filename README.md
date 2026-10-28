@@ -22,8 +22,7 @@ Seluruh angka di naskah dihasilkan dari dataset ini, bukan dihitung manual.
 │       ├── validasi_label_manual.csv             # 150 baris, kolom label_manual kosong
 │       └── validasi_label_manual_terisi.csv      # 150 baris, sudah terisi
 ├── validation/
-│   ├── Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb   # sumber angka naskah
-│   └── Validasi_Sentimen_IndoBERT_Revisi.ipynb           # revisi, belum dipakai naskah
+│   └── Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb
 └── replication/
     ├── Replikasi_Lolos/                          # 4 paper yang berhasil direplikasi
     └── Replikasi_Tidak_Lolos/                    # 9 paper yang gagal direplikasi
@@ -147,16 +146,15 @@ Batas bawah versi mengikuti sel `pip install` pada notebook. Untuk mereproduksi 
 
 ## 📌 Catatan
 
-Dua notebook di `validation/` punya peran berbeda.
+`validation/Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb` adalah notebook eksperimen. Seluruh angka di naskah berasal dari berkas ini. Isinya melatih IndoBERT, empat *baseline* klasik, dekomposisi matriks konfusi, ROC/PR, Stratified 5-Fold CV, uji Wilcoxon dan uji-t berpasangan, pengukuran latensi, serta regresi logistik insiden VAR. 22 sel, 11 berjalan, 6 gambar.
 
-* **`Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb`** — sumber seluruh angka di naskah. Melatih IndoBERT, empat *baseline* klasik, dekomposisi matriks konfusi, ROC/PR, Stratified 5-Fold CV, uji Wilcoxon dan uji-t berpasangan, latensi, serta regresi logistik insiden VAR. 22 sel, 11 berjalan, 6 gambar.
-* **`Validasi_Sentimen_IndoBERT_Revisi.ipynb`** — versi revisi, lebih baru, belum dipakai naskah. Menambah audit komentar kembar latih→uji, audit label sarkasme berbasis penanda tawa, tiga *seed* (42/43/44), pencatatan versi pustaka, dan pembandingan aturan kata kunci VAR lama lawan baru. Menyimpan seluruh tabel keluaran ke `hasil_validasi/`. 29 sel, 13 berjalan, 4 gambar.
+Jalankan dari akar repositori, karena memakai path relatif dan membaca `data/processed/train_dataset_80.csv` serta `test_dataset_20.csv`.
 
-Jalankan keduanya dari akar repositori, karena memakai path relatif dan membaca `data/processed/train_dataset_80.csv` serta `test_dataset_20.csv`.
+### Versi revisi tidak disertakan
 
-### Kedua notebook tidak sepakat
+Ada notebook revisi yang lebih baru, tetapi **tidak** ada di repo. Versi itu memperbaiki aturan kata kunci kategori VAR, sehingga angkanya bergeser dari naskah:
 
-| Metrik (data uji) | Naskah & notebook metode | Notebook revisi |
+| Metrik (data uji) | Naskah (notebook di repo) | Versi revisi |
 |---|---|---|
 | Akurasi | 74,85% | 78,77% |
 | Macro-F1 | 72,56% | 76,70% |
@@ -165,7 +163,7 @@ Jalankan keduanya dari akar repositori, karena memakai path relatif dan membaca 
 | *Seed* | 42, 123, 2024 | 42, 43, 44 |
 | Uji Wilcoxon / uji-t | ada, p = 0,160 / 0,154 | **tidak ada** |
 
-Sebabnya: notebook revisi memperbaiki aturan kata kunci kategori VAR dan aspek entitas, sehingga Tabel 1, Tabel 2, dan koefisien OLS ikut bergeser; *seed* juga diganti dan uji signifikansi dihapus. Notebook itu menutup dengan catatan bahwa abstrak, 3.1, dan kesimpulan "harus diperbarui" — dan itu belum dikerjakan. Selama belum, angka naskah hanya konsisten dengan notebook metode, bukan dengan yang revisi.
+Selain Tabel 1, Tabel 2, dan koefisien OLS yang ikut bergeser, versi revisi juga memakai *seed* lain (42/43/44) dan menghapus uji Wilcoxon serta uji-t. Kalau nanti dipakai, abstrak, 3.1, dan kesimpulan harus diperbarui lebih dulu.
 
 ## 📄 Lisensi
 
