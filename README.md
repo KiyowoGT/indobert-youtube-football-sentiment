@@ -150,20 +150,23 @@ Batas bawah versi mengikuti sel `pip install` pada notebook. Untuk mereproduksi 
 
 Notebook mencari `data/processed/train_dataset_80.csv` dan `test_dataset_20.csv` secara relatif, jadi bisa dijalankan dari akar repositori maupun dari dalam `validation/`. Jangan pindahkan CSV ke akar; kalau perlu, sesuaikan daftar `train_paths` dan `test_paths` di sel kelima.
 
-### Versi revisi tidak disertakan
+### Varian eksperimen
 
-Ada notebook revisi yang lebih baru, tetapi **tidak** ada di repo. Versi itu memperbaiki aturan kata kunci kategori VAR, sehingga angkanya bergeser dari naskah:
+Ada dua varian notebook yang beredar. Bedanya satu hal: varian tanpa set validasi melatih seluruh data latih dan memilih *checkpoint* terakhir, sehingga angkanya lebih tinggi dan uji signifikansi ikut lolos.
 
-| Metrik (data uji) | Naskah (notebook di repo) | Versi revisi |
+| Metrik (data uji) | Tanpa validasi (78,77%) | **Dengan validasi 10% (dipakai naskah)** |
 |---|---|---|
-| Akurasi | 74,85% | 78,77% |
-| Macro-F1 | 72,56% | 76,70% |
-| ROC-AUC | 89,24% | 89,90% |
-| Latensi | 5,434 ms | 5,03 ms |
-| *Seed* | 42, 123, 2024 | 42, 43, 44 |
-| Uji Wilcoxon / uji-t | ada, p = 0,160 / 0,154 | **tidak ada** |
+| Akurasi | 78,77% | 74,85% |
+| Weighted-F1 | 78,67% | 75,09% |
+| Macro-F1 | 76,70% | 72,56% |
+| ROC-AUC | 89,90% | 89,24% |
+| PR-AUC | 80,65% | 81,16% |
+| RAM | 1.797,8 MB | 2.041,1 MB |
+| Wilcoxon / uji-t | p = 0,0098 / 0,0052 (signifikan) | p = 0,160 / 0,154 (tidak signifikan) |
 
-Selain Tabel 1, Tabel 2, dan koefisien OLS yang ikut bergeser, versi revisi juga memakai *seed* lain (42/43/44) dan menghapus uji Wilcoxon serta uji-t. Kalau nanti dipakai, abstrak, 3.1, dan kesimpulan harus diperbarui lebih dulu.
+Naskah memakai varian **dengan validasi 10%**, yaitu berkas `validation/Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb` yang ada di repo ini. Alasannya: 10% data latih disisihkan lebih dulu sehingga pemilihan *checkpoint* tidak menyentuh data uji. Konsekuensinya akurasi turun dan keunggulan atas SVM tidak lagi signifikan, dan naskah melaporkan apa adanya.
+
+Varian tanpa validasi tidak disertakan. Kalau dipakai, hampir seluruh angka di abstrak, 3.1, dan kesimpulan harus diganti, termasuk klaim signifikansi.
 
 ## 📄 Lisensi
 
