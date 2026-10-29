@@ -88,7 +88,7 @@ Komentar yang gugur saat penyaringan. Kolom `cleaned_text` dan `alasan`. 2.144 b
 ```python
 import pandas as pd
 
-train = pd.read_csv('data/processed/train_dataset_80.csv')
+train = pd.read_csv('data/processed/train_dataset_80.csv')   # jalankan dari akar repo
 test = pd.read_csv('data/processed/test_dataset_20.csv')
 
 print(train.shape)   # (2652, 3)
@@ -123,7 +123,7 @@ print('kappa:', cohen_kappa_score(df.label_manual, df.label_otomatis, labels=lab
 python -m venv .venv && source .venv/bin/activate
 pip install "transformers>=4.30.0" "torch>=2.0.0" "scikit-learn>=1.2.0" \
             "statsmodels>=0.14.0" seaborn matplotlib scipy psutil pandas numpy jupyterlab
-jupyter lab            # lalu buka validation/ atau replication/ dari peramban
+jupyter lab            # buka validation/…ipynb lewat peramban
 ```
 
 | Komponen | Nilai |
@@ -148,7 +148,7 @@ Batas bawah versi mengikuti sel `pip install` pada notebook. Untuk mereproduksi 
 
 `validation/Validasi_Metode_4Paper_ke_Dataset_YouTube.ipynb` adalah notebook eksperimen. Seluruh angka di naskah berasal dari berkas ini. Isinya melatih IndoBERT, empat *baseline* klasik, dekomposisi matriks konfusi, ROC/PR, Stratified 5-Fold CV, uji Wilcoxon dan uji-t berpasangan, pengukuran latensi, serta regresi logistik insiden VAR. 22 sel, 11 berjalan, 6 gambar.
 
-Jalankan dari akar repositori, karena memakai path relatif dan membaca `data/processed/train_dataset_80.csv` serta `test_dataset_20.csv`.
+Notebook mencari `data/processed/train_dataset_80.csv` dan `test_dataset_20.csv` secara relatif, jadi bisa dijalankan dari akar repositori maupun dari dalam `validation/`. Jangan pindahkan CSV ke akar; kalau perlu, sesuaikan daftar `train_paths` dan `test_paths` di sel kelima.
 
 ### Versi revisi tidak disertakan
 
